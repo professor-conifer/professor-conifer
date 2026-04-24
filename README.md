@@ -2,9 +2,9 @@
 
 # 🌲 Professor Conifer
 
-### _"The tree of knowledge bears the strangest fruit."_
+### _"Weak Pokémon. Strong Pokémon. This is only selfish perception of people."_
 
-**Pokémon Battle AI Researcher · Hobbyist Developer · Hoenn Ranger**
+**AI Researcher · Hobbyist Developer · One day aiming to be the _Very Best_**
 
 ---
 
