@@ -27,16 +27,13 @@ Exploring how LLMs (Gemini, Claude) reason about competitive Pokémon battles in
 
 ### ⚔️ Showdown Live Stats
 
-> 🔄 Auto-updated every 6 hours via GitHub Actions
+<div align="center">
 
-| Format | ELO | GXE | Glicko-1 | W/L |
-|--------|-----|-----|----------|-----|
-<!-- SHOWDOWN_STATS_START -->
+<img src="showdown-stats.svg" alt="Showdown Stats" width="480" />
 
-| gen9randombattle | 1000 | — | 1500 | 0/0 |
-<!-- SHOWDOWN_STATS_END -->
+[OldManProfConifer](https://pokemonshowdown.com/users/oldmanprofconifer) on [Pokémon Showdown](https://play.pokemonshowdown.com/) · 🔄 Auto-updated every 6h
 
-_<sub>Trainer: [OldManProfConifer](https://pokemonshowdown.com/users/oldmanprofconifer) on [Pokémon Showdown](https://play.pokemonshowdown.com/)</sub>_
+</div>
 
 ---
 

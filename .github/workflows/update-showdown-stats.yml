@@ -14,12 +14,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Fetch Showdown ratings
+      - name: Fetch Showdown ratings & generate SVG
         env:
           PS_USER: OldManProfConifer
         run: |
           python3 -c "
-          import json, urllib.request, re
+          import json, urllib.request
 
           user = '${PS_USER}'
           url = f'https://pokemonshowdown.com/users/{user.lower()}.json'
@@ -29,50 +29,112 @@ jobs:
               data = json.loads(raw)
           except Exception as e:
               print(f'Failed to fetch: {e}')
-              # Leave README unchanged on failure
               exit(0)
 
           ratings = data.get('ratings', {})
 
-          # Build table rows
-          rows = []
-          for fmt, info in sorted(ratings.items()):
-              elo = info.get('elo', '—')
-              gxe = info.get('gxe', '—')
-              # gxe comes as float like 34.5, format it
-              if isinstance(gxe, (int, float)):
-                  gxe = f'{gxe:.1f}%'
-              glicko = info.get('rpr', '—')
-              # Format glicko nicely
-              if isinstance(glicko, (int, float)):
-                  glicko = f'{glicko:.0f}'
-              w = info.get('w', 0)
-              l = info.get('l', 0)
-              rows.append(f'| {fmt} | {elo} | {gxe} | {glicko} | {w}/{l} |')
+          # Colors matching the profile theme
+          bg = '#0d1117'
+          card_bg = '#161b22'
+          border = '#30363d'
+          title_color = '#22c55e'
+          text_color = '#c9d1d9'
+          accent = '#38bdf8'
+          muted = '#8b949e'
+          elo_color = '#3fb950'
+          gxe_color = '#58a6ff'
+          loss_color = '#f85149'
 
-          if not rows:
-              rows.append('| — | No ranked formats yet | — | — | — |')
+          formats = sorted(ratings.items())
+          row_h = 28
+          header_h = 50
+          footer_h = 30
+          padding = 16
+          card_w = 480
 
-          table = '\n'.join(rows)
-
-          # Read README
-          with open('README.md', 'r') as f:
-              readme = f.read()
-
-          # Replace between markers
-          pattern = r'(<!-- SHOWDOWN_STATS_START -->\n).*?(<!-- SHOWDOWN_STATS_END -->)'
-          replacement = r'\1' + table + '\n' + r'\2'
-          new_readme = re.sub(pattern, replacement, readme, flags=re.DOTALL)
-
-          if new_readme != readme:
-              with open('README.md', 'w') as f:
-                  f.write(new_readme)
-              print('Stats updated!')
+          if not formats:
+              content_h = 40
           else:
-              print('No changes.')
+              content_h = len(formats) * row_h
+
+          card_h = header_h + content_h + footer_h + padding * 2
+
+          svg_parts = []
+          svg_parts.append(f'<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"{card_w}\" height=\"{card_h}\" viewBox=\"0 0 {card_w} {card_h}\">')
+          svg_parts.append(f'  <defs>')
+          svg_parts.append(f'    <linearGradient id=\"headerGrad\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"0\">')
+          svg_parts.append(f'      <stop offset=\"0%\" stop-color=\"#22c55e\" stop-opacity=\"0.15\"/>')
+          svg_parts.append(f'      <stop offset=\"100%\" stop-color=\"#38bdf8\" stop-opacity=\"0.08\"/>')
+          svg_parts.append(f'    </linearGradient>')
+          svg_parts.append(f'  </defs>')
+
+          # Card background
+          svg_parts.append(f'  <rect width=\"{card_w}\" height=\"{card_h}\" rx=\"12\" fill=\"{card_bg}\" stroke=\"{border}\" stroke-width=\"1\"/>')
+
+          # Header area with gradient
+          svg_parts.append(f'  <rect width=\"{card_w}\" height=\"{header_h}\" rx=\"12\" fill=\"url(#headerGrad)\"/>')
+          svg_parts.append(f'  <rect y=\"{header_h - 1}\" width=\"{card_w}\" height=\"2\" fill=\"{border}\"/>')
+
+          # Title
+          svg_parts.append(f'  <text x=\"{padding}\" y=\"32\" font-family=\"Segoe UI,system-ui,sans-serif\" font-size=\"16\" font-weight=\"700\" fill=\"{title_color}\">⚔️  Showdown Stats</text>')
+          svg_parts.append(f'  <text x=\"{card_w - padding}\" y=\"32\" font-family=\"Segoe UI,system-ui,sans-serif\" font-size=\"11\" fill=\"{muted}\" text-anchor=\"end\">{user}</text>')
+
+          y = header_h + padding
+
+          if not formats:
+              svg_parts.append(f'  <text x=\"{card_w // 2}\" y=\"{y + 20}\" font-family=\"Segoe UI,system-ui,sans-serif\" font-size=\"13\" fill=\"{muted}\" text-anchor=\"middle\">No ranked formats yet</text>')
+          else:
+              # Column positions
+              c_fmt = padding
+              c_elo = 240
+              c_gxe = 320
+              c_wl = 400
+
+              # Column headers
+              svg_parts.append(f'  <text x=\"{c_fmt}\" y=\"{y}\" font-family=\"Segoe UI,system-ui,sans-serif\" font-size=\"10\" fill=\"{muted}\">FORMAT</text>')
+              svg_parts.append(f'  <text x=\"{c_elo}\" y=\"{y}\" font-family=\"Segoe UI,system-ui,sans-serif\" font-size=\"10\" fill=\"{muted}\">ELO</text>')
+              svg_parts.append(f'  <text x=\"{c_gxe}\" y=\"{y}\" font-family=\"Segoe UI,system-ui,sans-serif\" font-size=\"10\" fill=\"{muted}\">GXE</text>')
+              svg_parts.append(f'  <text x=\"{c_wl}\" y=\"{y}\" font-family=\"Segoe UI,system-ui,sans-serif\" font-size=\"10\" fill=\"{muted}\">W / L</text>')
+              y += 6
+
+              # Separator line
+              svg_parts.append(f'  <line x1=\"{padding}\" y1=\"{y}\" x2=\"{card_w - padding}\" y2=\"{y}\" stroke=\"{border}\" stroke-width=\"0.5\"/>')
+              y += 16
+
+              for fmt, info in formats:
+                  elo = str(info.get('elo', '—'))
+                  gxe = info.get('gxe', '—')
+                  if isinstance(gxe, (int, float)):
+                      gxe = f'{gxe:.1f}%'
+                  w = info.get('w', 0)
+                  l = info.get('l', 0)
+
+                  # Alternate row bg
+                  idx = formats.index((fmt, info))
+                  if idx % 2 == 0:
+                      svg_parts.append(f'  <rect x=\"4\" y=\"{y - 12}\" width=\"{card_w - 8}\" height=\"{row_h}\" rx=\"4\" fill=\"{bg}\" opacity=\"0.4\"/>')
+
+                  svg_parts.append(f'  <text x=\"{c_fmt}\" y=\"{y}\" font-family=\"Segoe UI,system-ui,sans-serif\" font-size=\"12\" fill=\"{text_color}\">{fmt}</text>')
+                  svg_parts.append(f'  <text x=\"{c_elo}\" y=\"{y}\" font-family=\"Segoe UI,system-ui,sans-serif\" font-size=\"12\" font-weight=\"600\" fill=\"{elo_color}\">{elo}</text>')
+                  svg_parts.append(f'  <text x=\"{c_gxe}\" y=\"{y}\" font-family=\"Segoe UI,system-ui,sans-serif\" font-size=\"12\" fill=\"{gxe_color}\">{gxe}</text>')
+
+                  wl_text = f'{w} / {l}'
+                  wl_color = elo_color if w >= l else loss_color
+                  svg_parts.append(f'  <text x=\"{c_wl}\" y=\"{y}\" font-family=\"Segoe UI,system-ui,sans-serif\" font-size=\"12\" fill=\"{wl_color}\">{wl_text}</text>')
+
+                  y += row_h
+
+          # Footer
+          svg_parts.append(f'  <text x=\"{card_w // 2}\" y=\"{card_h - 10}\" font-family=\"Segoe UI,system-ui,sans-serif\" font-size=\"9\" fill=\"{muted}\" text-anchor=\"middle\">pokemonshowdown.com</text>')
+
+          svg_parts.append('</svg>')
+
+          with open('showdown-stats.svg', 'w') as f:
+              f.write('\n'.join(svg_parts))
+          print('SVG generated!')
           "
 
       - name: Commit if changed
         run: |
-          git diff --quiet README.md || git commit -am "🔄 Update Showdown stats"
+          git diff --quiet showdown-stats.svg || git commit -am "🔄 Update Showdown stats"
           git push
