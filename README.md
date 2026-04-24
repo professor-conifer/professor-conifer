@@ -65,17 +65,17 @@ Exploring how LLMs (Gemini, Claude) reason about competitive Pokémon battles in
 ```python
 class ProfessorConifer:
     region = "Hoenn"
-    types = ["Grass", "Psychic"]
-    interests = ["AI", "Pokémon", "Competitive Battling"]
-    current_research = "LLM reasoning in turn-based strategy games"
-    favorite_pokemon = ["Sceptile", "Metagross", "Gardevoir"]
-    motto = "The best algorithm is the one that surprises you"
+    types = ["Psychic", "Ghost", "Poison"]
+    interests = ["AI", "Coding", "Pokémon", "Competitive Battling"]
+    current_research = "LLM reasoning in video games"
+    favorite_pokemon = ["Darkrai", "Gliscor", "Gardevoir", "Meowscarada"]
+    motto = "Weak Pokémon. Strong Pokémon. This is only selfish perception of people."
 ```
 
 <div align="center">
 
 [![Discord](https://img.shields.io/badge/Discord-@profconifer-5865F2?style=flat-square&logo=discord)](https://discord.com)
 
-_<sub>🌱 Growing knowledge, one battle at a time.</sub>_
+_<sub>🌱 Training to be the very best, one battle at a time.</sub>_
 
 </div>
