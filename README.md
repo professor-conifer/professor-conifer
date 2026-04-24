@@ -1,0 +1,84 @@
+<div align="center">
+
+# 🌲 Professor Conifer
+
+### _"The tree of knowledge bears the strangest fruit."_
+
+**Pokémon Battle AI Researcher · Hobbyist Developer · Hoenn Ranger**
+
+---
+
+<!-- Trainer Card -->
+<img src="https://img.shields.io/badge/Region-Hoenn-38bdf8?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJ3aGl0ZSI+PHBhdGggZD0iTTEyIDJDNi40OCAyIDIgNi40OCAyIDEyczQuNDggMTAgMTAgMTAgMTAtNC40OCAxMC0xMFMxNy41MiAyIDEyIDJ6bTAgMThjLTQuNDEgMC04LTMuNTktOC04czMuNTktOCA4LTggOCAzLjU5IDggOC0zLjU5IDgtOCA4OHoiLz48L3N2Zz4=" />
+<img src="https://img.shields.io/badge/Type-Grass%2FPsychic-22c55e?style=for-the-badge" />
+<img src="https://img.shields.io/badge/Badge-8%2F8-fbbf24?style=for-the-badge" />
+
+---
+
+### 🔬 Research Focus
+
+Building **[PsyMew](https://github.com/professor-conifer/PsyMew)** — a Pokémon Showdown battle bot powered by modern AI.
+
+Exploring how LLMs (Gemini, Claude) reason about competitive Pokémon battles in real-time, combining function-calling tool use with Monte Carlo Tree Search for decision-making.
+
+</div>
+
+---
+
+### ⚔️ Showdown Live Stats
+
+> 🔄 Auto-updated every 6 hours via GitHub Actions
+
+| Format | ELO | GXE | Glicko-1 | W/L |
+|--------|-----|-----|----------|-----|
+<!-- SHOWDOWN_STATS_START -->
+
+| gen9randombattle | 1000 | — | 1500 | 0/0 |
+<!-- SHOWDOWN_STATS_END -->
+
+_<sub>Trainer: [OldManProfConifer](https://pokemonshowdown.com/users/oldmanprofconifer) on [Pokémon Showdown](https://play.pokemonshowdown.com/)</sub>_
+
+---
+
+### 📊 GitHub Activity
+
+<div align="center">
+
+<img src="https://github-readme-stats.vercel.app/api?username=professor-conifer&show_icons=true&theme=vue-dark&hide_border=true&bg_color=0d1117&title_color=22c55e&icon_color=38bdf8&text_color=c9d1d9" alt="GitHub Stats" />
+
+<img src="https://github-readme-streak-stats.herokuapp.com?user=professor-conifer&theme=vue-dark&hide_border=true&background=0d1117&ring=22c55e&fire=38bdf8&currLabel=38bdf8" alt="GitHub Streak" />
+
+<img src="https://github-readme-stats.vercel.app/api/top-langs/?username=professor-conifer&layout=compact&theme=vue-dark&hide_border=true&bg_color=0d1117&title_color=22c55e&text_color=c9d1d9" alt="Top Languages" />
+
+</div>
+
+---
+
+### 🧪 Projects
+
+| Project | Description |
+|---------|-------------|
+| [**PsyMew**](https://github.com/professor-conifer/PsyMew) | Pokémon Showdown AI battle bot — Gemini & Claude decision engines with MCTS |
+| _More coming soon..._ | _Stay tuned!_ |
+
+---
+
+### 🌿 About Me
+
+```python
+class ProfessorConifer:
+    region = "Hoenn"
+    types = ["Grass", "Psychic"]
+    interests = ["AI", "Pokémon", "Competitive Battling"]
+    current_research = "LLM reasoning in turn-based strategy games"
+    favorite_pokemon = ["Sceptile", "Metagross", "Gardevoir"]
+    motto = "The best algorithm is the one that surprises you"
+```
+
+<div align="center">
+
+[![Discord](https://img.shields.io/badge/Discord-@profconifer-5865F2?style=flat-square&logo=discord)](https://discord.com)
+
+_<sub>🌱 Growing knowledge, one battle at a time.</sub>_
+
+</div>

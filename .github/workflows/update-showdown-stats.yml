@@ -1,0 +1,78 @@
+name: Update Showdown Stats
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"  # every 6 hours
+  workflow_dispatch:        # manual trigger
+
+jobs:
+  update-stats:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch Showdown ratings
+        env:
+          PS_USER: OldManProfConifer
+        run: |
+          python3 -c "
+          import json, urllib.request, re
+
+          user = '${PS_USER}'
+          url = f'https://pokemonshowdown.com/users/{user.lower()}.json'
+
+          try:
+              raw = urllib.request.urlopen(url, timeout=15).read()
+              data = json.loads(raw)
+          except Exception as e:
+              print(f'Failed to fetch: {e}')
+              # Leave README unchanged on failure
+              exit(0)
+
+          ratings = data.get('ratings', {})
+
+          # Build table rows
+          rows = []
+          for fmt, info in sorted(ratings.items()):
+              elo = info.get('elo', '—')
+              gxe = info.get('gxe', '—')
+              # gxe comes as float like 34.5, format it
+              if isinstance(gxe, (int, float)):
+                  gxe = f'{gxe:.1f}%'
+              glicko = info.get('rpr', '—')
+              # Format glicko nicely
+              if isinstance(glicko, (int, float)):
+                  glicko = f'{glicko:.0f}'
+              w = info.get('w', 0)
+              l = info.get('l', 0)
+              rows.append(f'| {fmt} | {elo} | {gxe} | {glicko} | {w}/{l} |')
+
+          if not rows:
+              rows.append('| — | No ranked formats yet | — | — | — |')
+
+          table = '\n'.join(rows)
+
+          # Read README
+          with open('README.md', 'r') as f:
+              readme = f.read()
+
+          # Replace between markers
+          pattern = r'(<!-- SHOWDOWN_STATS_START -->\n).*?(<!-- SHOWDOWN_STATS_END -->)'
+          replacement = r'\1' + table + '\n' + r'\2'
+          new_readme = re.sub(pattern, replacement, readme, flags=re.DOTALL)
+
+          if new_readme != readme:
+              with open('README.md', 'w') as f:
+                  f.write(new_readme)
+              print('Stats updated!')
+          else:
+              print('No changes.')
+          "
+
+      - name: Commit if changed
+        run: |
+          git diff --quiet README.md || git commit -am "🔄 Update Showdown stats"
+          git push
